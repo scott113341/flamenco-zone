@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+</head>
+<body>
+
+<div id="player"></div>
+<h1 id="section"></h1>
+<p id="notes"></p>
+<p id="time"></p>
+
+<script>
+  var tag = document.createElement('script');
+  tag.src = "https://www.youtube.com/iframe_api";
+  var firstScriptTag = document.getElementsByTagName('script')[0];
+  firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+
+  var player;
+  function onYouTubeIframeAPIReady() {
+    player = new YT.Player('player', {
+      width: 1280 / 3,
+      height: 1280 / 3,
+//      width: 720 / 2,
+//      height: 1280 / 2,
+      videoId: 'ElEmIBiUu30',
+      playerVars: {
+        controls: 0,
+        showinfo: 0
+      },
+      events: {
+        onReady: onPlayerReady,
+        onStateChange: onPlayerStateChange
+      }
+    });
+  }
+  function onPlayerReady(event) {
+    event.target.playVideo();
+  }
+
+
+  var interval;
+
+  var done = false;
+  function onPlayerStateChange(event) {
+    if (event.data == YT.PlayerState.PLAYING && !done) {
+      setTimeout(stopVideo, 8000);
+      done = true;
+    }
+
+    if (event.data === YT.PlayerState.PLAYING) {
+      update();
+      interval = setInterval(function () {
+        console.log('here');
+        time++;
+        update();
+      }, 1000);
+    }
+  }
+  function stopVideo() {
+    player.stopVideo();
+  }
+
+
+  function update() {
+    document.getElementById('time').innerText = time;
+    document.getElementById('section').innerText = currentSection().name;
+    document.getElementById('notes').innerText = currentSection().notes;
+  }
+
+
+  var time = 0;
+  var sections = {
+    0: {
+      name: 'llamada',
+      notes: 'do the dance good'
+    },
+    4: {
+      name: 'el bistec',
+      notes: 'dance really fast'
+    },
+    6: {
+      name: 'chupacabra',
+      notes: 'take a bow'
+    }
+  };
+
+  function currentSection() {
+    var times = Object.keys(sections).map(function (t) {
+      return parseInt(t);
+    }).sort();
+    console.log(times);
+
+    var currentSectionIndex;
+
+    times.forEach(function (t) {
+      if (time >= t) currentSectionIndex = t;
+    });
+
+    return sections[currentSectionIndex.toString()];
+  }
+
+
+</script>
+</body>
+</html>
