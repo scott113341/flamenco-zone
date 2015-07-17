@@ -18,6 +18,37 @@ SpreadsheetData
   })
 
 
+  .then(() => {
+    var player = new YT.Player('player', {
+      width: 1280 / 3,
+      height: 1280 / 3,
+      videoId: 'ElEmIBiUu30',
+      playerVars: {
+        controls: 0,
+        showinfo: 0
+      },
+      events: {
+        onReady: onPlayerReady,
+        onStateChange: onPlayerStateChange
+      }
+    });
+
+
+    function onPlayerReady(event) {
+      event.target.playVideo();
+    }
+    function onPlayerStateChange(event) {
+      console.log(event);
+    }
+  })
+
+
+
+
+
+
+
+
 
   .then(() => {
     console.log('here');
